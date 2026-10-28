@@ -1,0 +1,874 @@
+/* =========================================================
+   Marcos Faz Fernández — CV website
+   Concept: the page as a network. Each section is a "hop"
+   with the colour of an Ethernet wire (T568B standard).
+   ========================================================= */
+
+/* ---------- 1. Design tokens ---------- */
+:root {
+  /* Base palette (light) */
+  --bg: #F3F5F2;
+  --surface: #FFFFFF;
+  --ink: #16202B;
+  --muted: #56616D;
+  --line: #D6DCD8;
+
+  /* Wire colours (T568B) */
+  --orange: #AD5509; /* darkened so small text passes WCAG AA (4.5:1) */
+  --green: #24793F;
+  --blue: #2B5FC4;
+  --brown: #84552F;
+  --wire-white: #FFFFFF;
+
+  /* Terminal (always dark, like a real one) */
+  --term-bg: #1B2632;
+  --term-bar: #24313F;
+  --term-ink: #DCE6EE;
+  --term-muted: #8C9AA8;
+
+  /* Type */
+  --font-sans: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "JetBrains Mono", "Consolas", monospace;
+
+  /* Modular scale (ratio 1.25) */
+  --step--1: 0.85rem;
+  --step-0: 1rem;
+  --step-1: 1.25rem;
+  --step-2: 1.563rem;
+  --step-3: clamp(1.8rem, 1.4rem + 1.6vw, 2.44rem);
+  --step-5: clamp(2.6rem, 1.6rem + 5vw, 5.4rem);
+
+  /* Layout */
+  --max: 1120px;
+  --gutter: clamp(16px, 4vw, 40px);
+  --radius: 10px;
+
+  color-scheme: light;
+}
+
+/* Dark theme: follows the system unless the visitor forced light */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #111920;
+    --surface: #18222C;
+    --ink: #E5EBF0;
+    --muted: #9AA7B3;
+    --line: #2A3743;
+    --orange: #F08A33;
+    --green: #48B36D;
+    --blue: #5C8CF0;
+    --brown: #B07C52;
+    --wire-white: #E5EBF0;
+    --term-bg: #0C1218;
+    --term-bar: #16202A;
+    color-scheme: dark;
+  }
+}
+
+/* Dark theme chosen manually with the toggle */
+:root[data-theme="dark"] {
+  --bg: #111920;
+  --surface: #18222C;
+  --ink: #E5EBF0;
+  --muted: #9AA7B3;
+  --line: #2A3743;
+  --orange: #F08A33;
+  --green: #48B36D;
+  --blue: #5C8CF0;
+  --brown: #B07C52;
+  --wire-white: #E5EBF0;
+  --term-bg: #0C1218;
+  --term-bar: #16202A;
+  color-scheme: dark;
+}
+
+/* Each element with data-wire exposes its colour as --wire */
+[data-wire="blue"]   { --wire: var(--blue); }
+[data-wire="green"]  { --wire: var(--green); }
+[data-wire="orange"] { --wire: var(--orange); }
+[data-wire="brown"]  { --wire: var(--brown); }
+[data-wire="ink"]    { --wire: var(--ink); }
+
+/* ---------- 2. Base ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 80px; /* keeps headings clear of the sticky nav */
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: var(--step-0);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+h1, h2, h3, p, ul, ol, dl, dd {
+  margin: 0;
+}
+
+ul, ol {
+  padding: 0;
+  list-style: none;
+}
+
+a {
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 3px solid var(--blue);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.skip-link {
+  position: absolute;
+  left: 16px;
+  top: -60px;
+  z-index: 100;
+  padding: 10px 16px;
+  background: var(--ink);
+  color: var(--bg);
+  border-radius: 6px;
+  text-decoration: none;
+}
+
+.skip-link:focus {
+  top: 12px;
+}
+
+/* ---------- 3. Navigation ---------- */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--line);
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 12px var(--gutter);
+}
+
+.nav__brand {
+  font-weight: 800;
+  font-stretch: 125%;
+  font-size: var(--step-1);
+  letter-spacing: -0.02em;
+  text-decoration: none;
+}
+
+.nav__list {
+  display: flex;
+  gap: 4px;
+  margin-left: auto;
+}
+
+.nav__link {
+  position: relative;
+  display: block;
+  padding: 6px 12px;
+  border-radius: 6px;
+  color: var(--muted);
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+/* Coloured wire under each link; grows when hovered or when its section is in view */
+.nav__link::after {
+  content: "";
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 2px;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--wire);
+  transform: scaleX(0.25);
+  transform-origin: left;
+  opacity: 0.6;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+.nav__link:hover,
+.nav__link.is-active {
+  color: var(--ink);
+}
+
+.nav__link:hover::after,
+.nav__link.is-active::after {
+  transform: scaleX(1);
+  opacity: 1;
+}
+
+.theme-toggle {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--ink);
+  cursor: pointer;
+}
+
+/* Half-filled circle icon drawn in CSS */
+.theme-toggle__icon {
+  width: 16px;
+  height: 16px;
+  border: 2px solid currentColor;
+  border-radius: 50%;
+  background: linear-gradient(90deg, currentColor 50%, transparent 50%);
+}
+
+/* ---------- 4. Hero ---------- */
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  gap: clamp(32px, 5vw, 72px);
+  align-items: center;
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: clamp(48px, 8vw, 112px) var(--gutter) clamp(56px, 8vw, 104px);
+}
+
+.hero__role {
+  color: var(--muted);
+  font-size: var(--step-1);
+  font-weight: 500;
+}
+
+.hero__name {
+  margin: 12px 0 24px;
+  font-size: var(--step-5);
+  font-weight: 850;
+  font-stretch: 125%;
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+}
+
+.hero__name span {
+  display: block;
+}
+
+/* Second line set narrower and lighter: the width axis does the work */
+.hero__name span + span {
+  font-stretch: 75%;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+
+.hero__summary {
+  max-width: 58ch;
+  color: var(--muted);
+  font-size: 1.075rem;
+}
+
+.hero__facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 28px;
+  margin-top: 28px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+}
+
+.fact__label {
+  display: block;
+  color: var(--muted);
+  font-size: var(--step--1);
+}
+
+/* ---------- 5. Terminal ---------- */
+.terminal {
+  overflow: hidden;
+  border-radius: var(--radius);
+  background: var(--term-bg);
+  color: var(--term-ink);
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  box-shadow: 0 24px 48px -24px rgba(22, 32, 43, 0.45);
+}
+
+.terminal__bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: var(--term-bar);
+}
+
+.terminal__dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: #3A4857;
+}
+
+.terminal__title {
+  margin-left: 8px;
+  color: var(--term-muted);
+  font-size: 0.8rem;
+}
+
+.terminal__body {
+  padding: 20px 18px 22px;
+}
+
+.prompt {
+  color: var(--green);
+  font-weight: 600;
+}
+
+.terminal__cmd {
+  margin-bottom: 14px;
+}
+
+.hops {
+  display: grid;
+  gap: 2px;
+}
+
+.hop a {
+  display: grid;
+  grid-template-columns: 1.5em minmax(0, 9.5em) minmax(0, 1fr);
+  gap: 10px;
+  align-items: baseline;
+  padding: 7px 10px;
+  border-left: 3px solid var(--wire);
+  border-radius: 0 6px 6px 0;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+
+.hop a:hover,
+.hop a:focus-visible {
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.hop__n {
+  color: var(--term-muted);
+}
+
+.hop__host {
+  color: var(--term-ink);
+  font-weight: 600;
+}
+
+.hop__info {
+  overflow: hidden;
+  color: var(--term-muted);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* In the dark terminal the "ink" wire needs to be light */
+.hop[data-wire="ink"] {
+  --wire: var(--term-ink);
+}
+
+.hop--final .hop__info {
+  color: var(--green);
+}
+
+.terminal__cursor {
+  margin-top: 14px;
+}
+
+.cursor {
+  display: inline-block;
+  width: 0.6em;
+  height: 1.1em;
+  vertical-align: text-bottom;
+  background: var(--term-ink);
+  animation: blink 1.1s steps(1) infinite;
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
+/* Page-load sequence: hops appear one after another, like a real traceroute.
+   The class is added by script.js, so without JS everything is visible. */
+.js .hop {
+  opacity: 0;
+  transform: translateX(-6px);
+  animation: hop-in 0.35s ease forwards;
+  animation-delay: calc(0.45s + var(--i, 0) * 0.32s);
+}
+
+@keyframes hop-in {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ---------- 6. Sections ---------- */
+.section {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2.2fr);
+  gap: clamp(24px, 4vw, 64px);
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: clamp(56px, 7vw, 96px) var(--gutter);
+  border-top: 1px solid var(--line);
+}
+
+.section__head {
+  align-self: start;
+}
+
+/* The wire: a short piece of cable in the section colour */
+.wire {
+  display: block;
+  width: 56px;
+  height: 8px;
+  margin-bottom: 18px;
+  border-radius: 4px;
+  background: var(--wire);
+}
+
+.section__title {
+  font-size: var(--step-3);
+  font-weight: 800;
+  font-stretch: 112%;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.section__lead {
+  margin-top: 10px;
+  max-width: 30ch;
+  color: var(--muted);
+}
+
+/* ---------- 7. Skills ---------- */
+.skills {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 32px 40px;
+}
+
+.skill-group h3 {
+  margin-bottom: 12px;
+  font-size: var(--step-1);
+  font-weight: 700;
+}
+
+.skill-group--wide {
+  grid-column: 1 / -1;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tags li {
+  padding: 5px 12px;
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--wire, var(--ink));
+  border-radius: 4px;
+  background: var(--surface);
+  font-size: 0.95rem;
+}
+
+.tags--small li {
+  padding: 3px 10px;
+  font-size: var(--step--1);
+}
+
+.langs {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.langs dt {
+  font-weight: 700;
+}
+
+.langs dd {
+  color: var(--muted);
+}
+
+/* ---------- 8. Projects ---------- */
+.projects {
+  display: grid;
+  gap: 40px;
+}
+
+.project {
+  padding-left: 24px;
+  border-left: 2px solid var(--line);
+}
+
+.project__meta {
+  color: var(--wire);
+  font-size: var(--step--1);
+  font-weight: 600;
+}
+
+.project__title {
+  margin: 4px 0 10px;
+  font-size: var(--step-2);
+  font-weight: 750;
+  font-stretch: 105%;
+  line-height: 1.2;
+}
+
+.project > p {
+  max-width: 62ch;
+  color: var(--muted);
+}
+
+.project__points {
+  margin: 14px 0 18px;
+  max-width: 62ch;
+}
+
+.project__points li {
+  position: relative;
+  padding-left: 20px;
+}
+
+.project__points li + li {
+  margin-top: 6px;
+}
+
+.project__points li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.7em;
+  width: 10px;
+  height: 2px;
+  background: var(--wire);
+}
+
+.projects__more a {
+  font-weight: 600;
+  text-decoration-color: var(--wire);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+
+/* ---------- 9. Timeline (education + experience) ---------- */
+.timeline {
+  position: relative;
+  display: grid;
+  gap: 36px;
+  padding-left: 28px;
+}
+
+/* Vertical cable */
+.timeline::before {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 8px;
+  bottom: 8px;
+  width: 2px;
+  background: var(--line);
+}
+
+.timeline__item {
+  position: relative;
+}
+
+/* Node on the cable */
+.timeline__item::before {
+  content: "";
+  position: absolute;
+  left: -28px;
+  top: 6px;
+  width: 12px;
+  height: 12px;
+  border: 3px solid var(--wire);
+  border-radius: 50%;
+  background: var(--bg);
+}
+
+.timeline__date {
+  color: var(--wire);
+  font-size: var(--step--1);
+  font-weight: 600;
+}
+
+.timeline__title {
+  margin-top: 2px;
+  font-size: var(--step-2);
+  font-weight: 750;
+  font-stretch: 105%;
+  line-height: 1.2;
+}
+
+.timeline__place {
+  margin: 2px 0 8px;
+  font-weight: 500;
+}
+
+.timeline__item > p:last-child {
+  max-width: 60ch;
+  color: var(--muted);
+}
+
+/* ---------- 10. Contact / footer ---------- */
+.contact {
+  margin-top: 24px;
+  background: var(--surface);
+  border-top: 1px solid var(--line);
+}
+
+/* RJ45 pinout strip: the eight wires in T568B order */
+.pinout {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  height: 10px;
+}
+
+.pin--orange { background: var(--orange); }
+.pin--green  { background: var(--green); }
+.pin--blue   { background: var(--blue); }
+.pin--brown  { background: var(--brown); }
+
+/* Striped "white-colour" wires */
+.pin--w-orange { background: repeating-linear-gradient(135deg, var(--wire-white) 0 6px, var(--orange) 6px 12px); }
+.pin--w-green  { background: repeating-linear-gradient(135deg, var(--wire-white) 0 6px, var(--green) 6px 12px); }
+.pin--w-blue   { background: repeating-linear-gradient(135deg, var(--wire-white) 0 6px, var(--blue) 6px 12px); }
+.pin--w-brown  { background: repeating-linear-gradient(135deg, var(--wire-white) 0 6px, var(--brown) 6px 12px); }
+
+.contact__inner {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: clamp(56px, 8vw, 104px) var(--gutter) 40px;
+}
+
+.contact__title {
+  font-size: var(--step-5);
+  font-weight: 850;
+  font-stretch: 125%;
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+.contact__text {
+  margin-top: 16px;
+  max-width: 52ch;
+  color: var(--muted);
+  font-size: var(--step-1);
+}
+
+.contact__email {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 16px;
+  margin-top: 36px;
+}
+
+.contact__mail {
+  font-size: var(--step-2);
+  font-weight: 600;
+  overflow-wrap: anywhere;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 6px;
+}
+
+.copy-btn {
+  padding: 8px 16px;
+  border: 1px solid var(--ink);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.copy-btn:hover {
+  background: var(--ink);
+  color: var(--surface);
+}
+
+.copy-status {
+  color: var(--green);
+  font-weight: 600;
+}
+
+.contact__links {
+  display: flex;
+  gap: 28px;
+  margin-top: 28px;
+}
+
+.contact__links a {
+  font-size: var(--step-1);
+  font-weight: 600;
+  text-decoration-color: var(--line);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 5px;
+  transition: text-decoration-color 0.2s ease;
+}
+
+.contact__links a:hover {
+  text-decoration-color: var(--ink);
+}
+
+.footer-note {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 20px var(--gutter) 32px;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: var(--step--1);
+}
+
+/* ---------- 11. Responsive ---------- */
+@media (max-width: 900px) {
+  .hero {
+    grid-template-columns: 1fr;
+  }
+
+  .section {
+    grid-template-columns: 1fr;
+  }
+
+  .section__lead {
+    max-width: 52ch;
+  }
+}
+
+@media (max-width: 720px) {
+  .nav {
+    gap: 12px;
+  }
+
+  /* Nav links scroll sideways instead of wrapping */
+  .nav__list {
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .nav__list::-webkit-scrollbar {
+    display: none;
+  }
+
+  .nav__link {
+    padding: 6px 6px;
+    font-size: 0.875rem;
+    white-space: nowrap;
+  }
+
+  .nav__link::after {
+    left: 6px;
+    right: 6px;
+  }
+
+  .contact__mail {
+    font-size: var(--step-1);
+  }
+
+  .skills {
+    grid-template-columns: 1fr;
+  }
+
+  .langs {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .hop a {
+    grid-template-columns: 1.5em minmax(0, 1fr);
+  }
+
+  .hop__info {
+    grid-column: 2;
+    white-space: normal;
+  }
+}
+
+@media (max-width: 420px) {
+  .nav__brand {
+    display: none;
+  }
+
+  .nav__list {
+    gap: 0;
+    margin-left: 0;
+  }
+
+  .nav__link {
+    padding: 6px 5px;
+    font-size: 0.8125rem;
+  }
+
+  .nav__link::after {
+    left: 5px;
+    right: 5px;
+  }
+
+  .theme-toggle {
+    flex-shrink: 0;
+    width: 34px;
+    height: 34px;
+    margin-left: auto;
+  }
+}
+
+/* ---------- 12. Accessibility: reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .js .hop {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ---------- 13. Print: a clean paper CV ---------- */
+@media print {
+  .site-header,
+  .terminal,
+  .copy-btn,
+  .pinout,
+  .skip-link {
+    display: none;
+  }
+
+  .hero,
+  .section {
+    grid-template-columns: 1fr;
+    padding: 16px 0;
+  }
+}

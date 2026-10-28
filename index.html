@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Marcos Faz Fernández | IT &amp; Networks</title>
+  <meta name="description" content="CV of Marcos Faz Fernández, Computer Engineering student at Universitat de Girona specialising in IT and networks.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%2316202B'/%3E%3Crect x='6' y='9' width='3' height='14' fill='%23E07A1F'/%3E%3Crect x='11' y='9' width='3' height='14' fill='%232F9A55'/%3E%3Crect x='16' y='9' width='3' height='14' fill='%232E66D0'/%3E%3Crect x='21' y='9' width='3' height='14' fill='%238A5A35'/%3E%3C/svg%3E">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- Sticky navigation: each link carries the colour of its "wire" -->
+  <header class="site-header">
+    <nav class="nav" aria-label="Main">
+      <a class="nav__brand" href="#top">MFF</a>
+      <ul class="nav__list">
+        <li><a class="nav__link" href="#skills" data-wire="blue">Skills</a></li>
+        <li><a class="nav__link" href="#projects" data-wire="green">Projects</a></li>
+        <li><a class="nav__link" href="#education" data-wire="orange">Education</a></li>
+        <li><a class="nav__link" href="#experience" data-wire="brown">Experience</a></li>
+        <li><a class="nav__link" href="#contact" data-wire="ink">Contact</a></li>
+      </ul>
+      <button class="theme-toggle" type="button" aria-label="Switch to dark theme">
+        <span class="theme-toggle__icon" aria-hidden="true"></span>
+      </button>
+    </nav>
+  </header>
+
+  <main id="main">
+    <!-- ============ HERO ============ -->
+    <section class="hero" id="top" aria-labelledby="hero-title">
+      <div class="hero__intro">
+        <p class="hero__role">Computer Engineering student, IT &amp; networks</p>
+        <h1 class="hero__name" id="hero-title">
+          <span>Marcos</span>
+          <span>Faz Fernández</span>
+        </h1>
+        <p class="hero__summary">
+          Fourth-year student at the Universitat de Girona who enjoys the layer most people never see:
+          the servers, cables and configuration that keep everything else online. Comfortable on Linux and
+          Windows, I program in Java and C++, and I like nothing better than a technical problem that needs
+          patience to untangle.
+        </p>
+        <ul class="hero__facts">
+          <li><span class="fact__label">Based in</span> Sils, Girona</li>
+          <li><span class="fact__label">Languages</span> Catalan, Spanish, English</li>
+          <li><span class="fact__label">Mobility</span> Driving licence and own car</li>
+        </ul>
+      </div>
+
+      <!-- Terminal: the traceroute hops double as a table of contents -->
+      <div class="terminal" role="region" aria-label="Page map shown as a traceroute">
+        <div class="terminal__bar" aria-hidden="true">
+          <span class="terminal__dot"></span><span class="terminal__dot"></span><span class="terminal__dot"></span>
+          <span class="terminal__title">marcos@udg: ~</span>
+        </div>
+        <div class="terminal__body">
+          <p class="terminal__cmd"><span class="prompt">$</span> traceroute marcos-faz</p>
+          <ol class="hops">
+            <li class="hop" data-wire="blue">
+              <a href="#skills"><span class="hop__n">1</span><span class="hop__host">skills.stack</span><span class="hop__info">Linux, Java, C++</span></a>
+            </li>
+            <li class="hop" data-wire="green">
+              <a href="#projects"><span class="hop__n">2</span><span class="hop__host">projects.lab</span><span class="hop__info">DNS network, 2D game AI</span></a>
+            </li>
+            <li class="hop" data-wire="orange">
+              <a href="#education"><span class="hop__n">3</span><span class="hop__host">education.udg</span><span class="hop__info">BSc, 2023 to now</span></a>
+            </li>
+            <li class="hop" data-wire="brown">
+              <a href="#experience"><span class="hop__n">4</span><span class="hop__host">experience.work</span><span class="hop__info">3 jobs since 2024</span></a>
+            </li>
+            <li class="hop hop--final" data-wire="ink">
+              <a href="#contact"><span class="hop__n">5</span><span class="hop__host">contact.marcos</span><span class="hop__info">destination reached</span></a>
+            </li>
+          </ol>
+          <p class="terminal__cursor" aria-hidden="true"><span class="prompt">$</span> <span class="cursor"></span></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ SKILLS ============ -->
+    <section class="section" id="skills" data-wire="blue" aria-labelledby="skills-title">
+      <div class="section__head">
+        <span class="wire" aria-hidden="true"></span>
+        <h2 class="section__title" id="skills-title">Skills</h2>
+        <p class="section__lead">What I can bring to an IT or infrastructure team today.</p>
+      </div>
+      <div class="section__body skills">
+        <div class="skill-group">
+          <h3>Systems</h3>
+          <ul class="tags">
+            <li>Linux</li>
+            <li>Windows</li>
+            <li>Server administration</li>
+          </ul>
+        </div>
+        <div class="skill-group">
+          <h3>Networking</h3>
+          <ul class="tags">
+            <li>Hierarchical network design</li>
+            <li>DNS</li>
+            <li>BIND9</li>
+          </ul>
+        </div>
+        <div class="skill-group">
+          <h3>Programming</h3>
+          <ul class="tags">
+            <li>Java</li>
+            <li>C++</li>
+            <li>Object-oriented design</li>
+          </ul>
+        </div>
+        <div class="skill-group">
+          <h3>Ways of working</h3>
+          <ul class="tags">
+            <li>Proactive</li>
+            <li>Technical problem solving</li>
+            <li>Reliable under pressure</li>
+          </ul>
+        </div>
+        <div class="skill-group skill-group--wide">
+          <h3>Languages</h3>
+          <dl class="langs">
+            <div><dt>Catalan</dt><dd>Native</dd></div>
+            <div><dt>Spanish</dt><dd>Native</dd></div>
+            <div><dt>English</dt><dd>Intermediate, fluent in speaking and writing</dd></div>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ PROJECTS ============ -->
+    <section class="section" id="projects" data-wire="green" aria-labelledby="projects-title">
+      <div class="section__head">
+        <span class="wire" aria-hidden="true"></span>
+        <h2 class="section__title" id="projects-title">Projects</h2>
+        <p class="section__lead">Academic work where I designed, configured and built things end to end.</p>
+      </div>
+      <div class="section__body projects">
+        <article class="project">
+          <p class="project__meta">Academic project, networks</p>
+          <h3 class="project__title">Network infrastructure and DNS design</h3>
+          <p>
+            Designed and deployed a hierarchical network that simulates a small, self-contained internet,
+            then made it navigable by name.
+          </p>
+          <ul class="project__points">
+            <li>Planned the network hierarchy and how traffic flows between its levels.</li>
+            <li>Configured and administered a primary DNS server and its backup replica with BIND9 on Linux.</li>
+          </ul>
+          <ul class="tags tags--small">
+            <li>Linux</li><li>BIND9</li><li>DNS</li><li>Network design</li>
+          </ul>
+        </article>
+
+        <article class="project">
+          <p class="project__meta">Academic project, AI and algorithms</p>
+          <h3 class="project__title">2D survival maze game</h3>
+          <p>
+            Object-oriented development of a 2D survival game set in a maze, focused on making the enemies
+            feel alive.
+          </p>
+          <ul class="project__points">
+            <li>Built the game structure with object-oriented programming.</li>
+            <li>Implemented pursuit logic and behaviour routines for the enemy NPCs.</li>
+          </ul>
+          <ul class="tags tags--small">
+            <li>OOP</li><li>Pathfinding</li><li>NPC behaviour</li>
+          </ul>
+        </article>
+
+        <p class="projects__more">
+          More code on <a href="https://github.com/FazdEzZz" target="_blank" rel="noopener">github.com/FazdEzZz</a>
+        </p>
+      </div>
+    </section>
+
+    <!-- ============ EDUCATION ============ -->
+    <section class="section" id="education" data-wire="orange" aria-labelledby="education-title">
+      <div class="section__head">
+        <span class="wire" aria-hidden="true"></span>
+        <h2 class="section__title" id="education-title">Education</h2>
+      </div>
+      <div class="section__body">
+        <ol class="timeline">
+          <li class="timeline__item">
+            <p class="timeline__date"><time datetime="2023-09">Sep 2023</time> to present</p>
+            <h3 class="timeline__title">Bachelor's degree in Computer Engineering</h3>
+            <p class="timeline__place">Universitat de Girona (UdG)</p>
+            <p>Currently in fourth year, specialising in IT and networks.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ============ EXPERIENCE ============ -->
+    <section class="section" id="experience" data-wire="brown" aria-labelledby="experience-title">
+      <div class="section__head">
+        <span class="wire" aria-hidden="true"></span>
+        <h2 class="section__title" id="experience-title">Experience</h2>
+        <p class="section__lead">Seasonal jobs alongside my studies, most recent first.</p>
+      </div>
+      <div class="section__body">
+        <ol class="timeline">
+          <li class="timeline__item">
+            <p class="timeline__date">Summers 2025 and 2026</p>
+            <h3 class="timeline__title">Facilities maintenance operator</h3>
+            <p class="timeline__place">OkTitans, municipal swimming pools</p>
+            <p>Upkeep of the pool facilities and their equipment during the summer season.</p>
+          </li>
+          <li class="timeline__item">
+            <p class="timeline__date">Summer 2024</p>
+            <h3 class="timeline__title">Petrol station attendant</h3>
+            <p class="timeline__place">Cepsa service station</p>
+            <p>Customer service and fuel dispensing.</p>
+          </li>
+          <li class="timeline__item">
+            <p class="timeline__date">2024</p>
+            <h3 class="timeline__title">Delivery driver</h3>
+            <p class="timeline__place">Pizzeria L'Angelo</p>
+            <p>Home deliveries on time and in good condition.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ CONTACT / FOOTER ============ -->
+  <footer class="contact" id="contact" aria-labelledby="contact-title">
+    <div class="pinout" aria-hidden="true">
+      <span class="pin pin--w-orange"></span><span class="pin pin--orange"></span>
+      <span class="pin pin--w-green"></span><span class="pin pin--blue"></span>
+      <span class="pin pin--w-blue"></span><span class="pin pin--green"></span>
+      <span class="pin pin--w-brown"></span><span class="pin pin--brown"></span>
+    </div>
+    <div class="contact__inner">
+      <h2 class="contact__title" id="contact-title">Let's connect</h2>
+      <p class="contact__text">Open to internships and junior roles in IT support, systems and network administration.</p>
+
+      <div class="contact__email">
+        <a class="contact__mail" href="mailto:marcos.faz.2004@gmail.com">marcos.faz.2004@gmail.com</a>
+        <button class="copy-btn" type="button" data-copy="marcos.faz.2004@gmail.com">Copy email</button>
+        <span class="copy-status" role="status" aria-live="polite"></span>
+      </div>
+
+      <ul class="contact__links">
+        <li><a href="https://github.com/FazdEzZz" target="_blank" rel="noopener">GitHub</a></li>
+        <li><a href="https://www.linkedin.com/in/marcos-faz-fernandez" target="_blank" rel="noopener">LinkedIn</a></li>
+      </ul>
+    </div>
+    <p class="footer-note">Built by hand with HTML, CSS and a little JavaScript. Wire colours follow the T568B standard.</p>
+  </footer>
+</body>
+</html>
